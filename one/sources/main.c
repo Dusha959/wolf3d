@@ -6,7 +6,7 @@
 /*   By: rsatterf <rsatterf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/21 23:41:30 by nbethany          #+#    #+#             */
-/*   Updated: 2019/08/30 14:04:57 by rsatterf         ###   ########.fr       */
+/*   Updated: 2019/09/04 18:09:50 by rsatterf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int check_int_map2(t_wolf_3d *wolf, int i, int j)
 {
-    if (wolf->map[i][j] < 0)
-        return (-1);
+    //if (wolf->map[i][j] < 0)
+        //return (-1);
     if ((i == 0) || (j == 0) || (i == (wolf->lines - 1)) || (j == (wolf->cols - 1)))
     {
         if (wolf->map[i][j] == 0)
@@ -66,6 +66,11 @@ int check_map_one(t_wolf_3d *wolf)
     int		k;
 
     wolf->fd = open(wolf->name, O_RDONLY);
+	if (wolf->fd < 0)
+	{
+		close(wolf->fd);
+		return (-1);
+	}
     if ((k = get_next_line(wolf->fd, &line)) == 0)
         return (-1);
     close(wolf->fd);
@@ -76,7 +81,7 @@ int check_map_one(t_wolf_3d *wolf)
         i = 0;
         while (line[i])
         {
-            if (((line[i] >= 48) && (line[i] <= 57)) || (line[i] == ' ') || (line[i] == '\n'))
+            if (((line[i] >= 48) && (line[i] <= 57)) || (line[i] == ' ') || (line[i] == '\n') || (line[i] == '-'))
                 i++;
             else
                 return (-1);
@@ -165,10 +170,7 @@ int     valid(t_wolf_3d *wolf)
     int	j;
 
     if ((check_map_one(wolf) == -1) || (check_map_two(wolf) == -1) || (check_int_map(wolf) == -1))
-    {
-        ft_putstr("error map\n");
         return (0);
-    }
     else
     {
         printf("%s\n", "good");
