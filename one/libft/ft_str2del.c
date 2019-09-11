@@ -1,18 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_iscntrl.c                                       :+:      :+:    :+:   */
+/*   ft_str2del.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nbethany <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sskinner <sskinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/15 16:43:05 by nbethany          #+#    #+#             */
-/*   Updated: 2019/01/15 17:59:53 by nbethany         ###   ########.fr       */
+/*   Created: 2019/04/10 17:16:42 by sskinner          #+#    #+#             */
+/*   Updated: 2019/04/15 16:07:50 by sskinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_iscntrl(int c)
+void	ft_str2del(char ***s)
 {
-	return (c < 32 || c == 127);
+	int		i;
+
+	i = -1;
+	if (!(**s))
+		return ;
+	while ((*s)[i])
+		ft_strdel(&((*s)[++i]));
+	s = NULL;
 }

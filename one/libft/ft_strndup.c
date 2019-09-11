@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcapitalize.c                                 :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nbethany <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sskinner <sskinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/15 16:05:52 by nbethany          #+#    #+#             */
-/*   Updated: 2019/01/15 18:25:58 by nbethany         ###   ########.fr       */
+/*   Created: 2019/04/05 13:30:39 by sskinner          #+#    #+#             */
+/*   Updated: 2019/04/17 15:42:27 by sskinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char		*ft_strcapitalize(char *str)
+char	*ft_strndup(const char *s1, size_t n)
 {
-	size_t	i;
+	char	*dup;
 
-	i = 0;
-	if (!str)
+	if (!(dup = ft_strnew(n)))
 		return (NULL);
-	str = ft_strlowcase(str);
-	while (str[i])
-	{
-		if ((i == 0 || ft_isspace(str[i - 1]) || str[i - 1] == '+' ||
-					str[i - 1] == '-') && (ft_islower(str[i])))
-			str[i] = ft_toupper(str[i]);
-		i++;
-	}
-	return (str);
+	ft_strncpy(dup, s1, n);
+	return (dup);
 }

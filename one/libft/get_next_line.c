@@ -3,62 +3,110 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nbethany <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sskinner <sskinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/17 04:48:02 by nbethany          #+#    #+#             */
-/*   Updated: 2019/02/20 22:26:10 by nbethany         ###   ########.fr       */
+/*   Created: 2019/05/12 14:24:41 by sskinner          #+#    #+#             */
+/*   Updated: 2019/05/25 11:49:41 by sskinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	new_line(char **str, char **line, int fd)
+static int		check_n_0(char *str)
 {
-	char	*tmp;
-	int		i;
+	int i;
 
 	i = 0;
-	while (str[fd][i] != '\0' && str[fd][i] != '\n')
+	while (str[i] != '\n' && str[i] != '\0')
 		i++;
-	if (str[fd][i] == '\0')
+	return (i);
+}
+
+static t_list	*listcreate(t_list **stack, const int fd)
+{
+	t_list *s;
+
+	if (*stack == NULL)
 	{
-		*line = ft_strdup(str[fd]);
-		ft_strdel(&str[fd]);
-		str[fd] = "\0";
+		*stack = ft_lstnew("\0", fd);
+		return (*stack);
 	}
-	else if (str[fd][i] == '\n')
+	if ((s = ft_lstcheck_contentsize(stack, fd)) == 0)
 	{
-		*line = ft_strsub(str[fd], 0, i);
-		tmp = ft_strdup(str[fd] + i + 1);
-		ft_strdel(&str[fd]);
-		str[fd] = tmp;
+		s = ft_lstnew("\0", fd);
+		ft_lstadd(stack, s);
+	}
+	return (s);
+}
+
+static int		reading_to_n(const int fd, t_list **stack)
+{
+	int		ret;
+	int		count;
+	t_list	*buf;
+	char	*tmp;
+	char	str[BUFF_SIZE + 1];
+
+	ret = BUFF_SIZE;
+	tmp = "";
+	count = 0;
+	while ((ft_strchr(tmp, '\n')) == NULL && ret == BUFF_SIZE)
+	{
+		if ((ret = read(fd, str, BUFF_SIZE)) > 0)
+		{
+			buf = listcreate(stack, fd);
+			str[ret] = '\0';
+			tmp = ft_strjoin(buf->content, str);
+			free(buf->content);
+			buf->content = tmp;
+		}
+		count += ret;
+	}
+	return (count);
+}
+
+static int		linef(t_list **stack, char **line, const int fd)
+{
+	char	*tmp;
+	char	*content;
+	int		i;
+	t_list	*search;
+
+	search = listcreate(stack, fd);
+	content = search->content;
+	i = check_n_0(content);
+	if (content[i] == '\n')
+	{
+		*line = ft_strsub(content, 0, i);
+		tmp = ft_strdup(content + i + 1);
+		free(search->content);
+		search->content = ft_strdup(tmp);
+		if (tmp[0] == '\0')
+			ft_lstdel_contentsize(stack, fd);
+		free(tmp);
+	}
+	else if (content[i] == '\0')
+	{
+		*line = ft_strdup(content);
+		ft_lstdel_contentsize(stack, fd);
 	}
 	return (1);
 }
 
-int	get_next_line(const int fd, char **line)
+int				get_next_line(const int fd, char **line)
 {
-	char		buf[BUFF_SIZE + 1];
-	char		*tmp;
-	static char	*str[1024];
-	int			i;
+	static t_list	*stack;
+	int				count;
+	int				ret;
+	char			buf[BUFF_SIZE + 1];
 
-	if (fd < 0 || !line)
+	if ((fd < 0) || (line == NULL) || read(fd, buf, 0) < 0)
 		return (-1);
-	while ((i = read(fd, buf, BUFF_SIZE)) > 0)
-	{
-		buf[i] = '\0';
-		if (!str[fd])
-			str[fd] = ft_memalloc(1);
-		tmp = ft_strjoin(str[fd], buf);
-		ft_strdel(&str[fd]);
-		str[fd] = tmp;
-		if (ft_strchr(buf, '\n'))
-			break ;
-	}
-	if (i < 0)
+	count = reading_to_n(fd, &stack);
+	if (count == -1)
 		return (-1);
-	if (i == 0 && (!str[fd] || str[fd][0] == '\0'))
+	if (count == 0 && (ft_lstcheck_contentsize(&stack, fd) == NULL))
 		return (0);
-	return (new_line(str, line, fd));
+	ret = linef(&stack, line, fd);
+	return (ret);
 }

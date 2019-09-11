@@ -1,29 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlowcase.c                                    :+:      :+:    :+:   */
+/*   ft_countwords_withnullstr.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nbethany <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sskinner <sskinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/15 16:20:48 by nbethany          #+#    #+#             */
-/*   Updated: 2019/01/15 18:46:46 by nbethany         ###   ########.fr       */
+/*   Created: 2019/04/15 13:24:00 by sskinner          #+#    #+#             */
+/*   Updated: 2019/04/20 14:27:33 by sskinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char		*ft_strlowcase(char *str)
+int		ft_countwords_withnullstr(char const *s, char c)
 {
-	size_t	i;
+	int		i;
 
 	i = 0;
-	if (!str)
-		return (NULL);
-	while (str[i])
+	while (*s)
 	{
-		if (str[i] >= 65 && str[i] <= 90)
-			str[i] = str[i] + 32;
-		i++;
+		if (*s && *s == c)
+			s++;
+		else
+		{
+			while (*s && *s != c)
+				s++;
+			i++;
+		}
 	}
-	return (str);
+	return (++i);
 }

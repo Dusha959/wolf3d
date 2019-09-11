@@ -1,25 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strdup.c                                           :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nbethany <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bcharity <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/11 17:28:30 by nbethany          #+#    #+#             */
-/*   Updated: 2019/01/15 18:42:39 by nbethany         ###   ########.fr       */
+/*   Created: 2019/04/06 09:13:29 by bcharity          #+#    #+#             */
+/*   Updated: 2019/04/27 14:33:32 by bcharity         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char		*ft_strdup(const char *s1)
+char	*ft_strdup(const char *src)
 {
-	size_t	size;
-	char	*str;
+	int		len;
+	int		i;
+	char	*buf;
 
-	size = ft_strlen(s1) + 1;
-	str = (char *)malloc(size);
-	if (str == NULL)
-		return (NULL);
-	return ((char *)ft_memcpy(str, s1, size));
+	buf = NULL;
+	len = 0;
+	while (src[len])
+	{
+		len++;
+	}
+	buf = (char*)malloc((sizeof(char) * (len + 1)));
+	if (buf != NULL)
+	{
+		i = 0;
+		while (i < len)
+		{
+			buf[i] = src[i];
+			i++;
+		}
+		buf[i] = '\0';
+		return (buf);
+	}
+	return (NULL);
 }

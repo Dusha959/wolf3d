@@ -1,26 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_intlen.c                                        :+:      :+:    :+:   */
+/*   ft_strcopyuntil.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nbethany <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sskinner <sskinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/13 22:45:38 by nbethany          #+#    #+#             */
-/*   Updated: 2019/01/15 17:49:11 by nbethany         ###   ########.fr       */
+/*   Created: 2019/04/27 13:56:06 by sskinner          #+#    #+#             */
+/*   Updated: 2019/04/27 14:09:24 by sskinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_intlen(int num)
+char	*ft_strcopyuntil(char *str, int c)
 {
-	int	len;
+	char	*tmp;
+	int		i;
 
-	len = (num <= 0 ? 1 : 0);
-	while (num)
+	if (!str)
+		return (NULL);
+	i = 0;
+	if (!(tmp = ft_strnew(ft_strlen(str) + 1)))
+		return (NULL);
+	while (str[i] != (unsigned char)c)
 	{
-		num = num / 10;
-		len++;
+		tmp[i] = str[i];
+		i++;
 	}
-	return (len);
+	tmp[i] = '\0';
+	return (tmp);
 }

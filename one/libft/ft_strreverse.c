@@ -1,29 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memchr.c                                        :+:      :+:    :+:   */
+/*   ft_strreverse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcharity <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sskinner <sskinner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/15 16:30:40 by bcharity          #+#    #+#             */
-/*   Updated: 2019/04/20 10:05:54 by bcharity         ###   ########.fr       */
+/*   Created: 2019/02/06 13:40:42 by sskinner          #+#    #+#             */
+/*   Updated: 2019/04/17 16:08:40 by sskinner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memchr(const void *dst, int c, size_t n)
+char	*ft_strreverse(const char *str)
 {
-	size_t					i;
-	const unsigned char		*d;
+	size_t	count;
+	size_t	end;
+	size_t	i;
+	char	*reverse;
 
 	i = 0;
-	d = (const unsigned char *)dst;
-	while (i < n)
+	count = ft_strlen(str);
+	if (!(reverse = ft_strnew(count)))
+		return (NULL);
+	end = count - 1;
+	while (i < count)
 	{
-		if (d[i] == (unsigned char)c)
-			return ((void*)(dst + i));
+		reverse[i] = str[end];
 		i++;
+		end--;
 	}
-	return (NULL);
+	reverse[i] = '\0';
+	return (reverse);
 }

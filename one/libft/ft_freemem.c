@@ -1,18 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_islower.c                                       :+:      :+:    :+:   */
+/*   ft_freemem.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nbethany <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bcharity <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/08 03:07:14 by nbethany          #+#    #+#             */
-/*   Updated: 2019/01/15 17:52:39 by nbethany         ###   ########.fr       */
+/*   Created: 2019/05/04 09:24:47 by bcharity          #+#    #+#             */
+/*   Updated: 2019/05/10 16:51:25 by bcharity         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_islower(int c)
+char	*ft_freemem(char **split, size_t i)
 {
-	return (c >= 97 && c <= 122 ? 1 : 0);
+	while (i > 0)
+	{
+		free(split[i]);
+		i--;
+	}
+	free(split);
+	return (NULL);
 }
