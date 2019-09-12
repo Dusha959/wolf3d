@@ -6,7 +6,7 @@
 /*   By: rsatterf <rsatterf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/21 23:41:30 by nbethany          #+#    #+#             */
-/*   Updated: 2019/09/12 17:46:09 by rsatterf         ###   ########.fr       */
+/*   Updated: 2019/09/12 18:53:40 by rsatterf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ int				valid(t_wolf_3d *wolf)
 		return (1);
 }
 
-static	int		close_app(void *param)
+static	int		close_app(t_wolf_3d *wolf)
 {
-	(void)param;
+	free(wolf);
 	exit(0);
 }
 
