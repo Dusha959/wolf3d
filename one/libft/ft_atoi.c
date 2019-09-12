@@ -3,55 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcharity <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nbethany <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/20 10:53:25 by bcharity          #+#    #+#             */
-/*   Updated: 2019/04/29 13:34:36 by bcharity         ###   ########.fr       */
+/*   Created: 2019/01/08 02:41:09 by nbethany          #+#    #+#             */
+/*   Updated: 2019/01/15 18:02:29 by nbethany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	check_valid(const char *str, int n)
+int	ft_atoi(const char *str)
 {
-	int i;
+	size_t				i;
+	unsigned long long	result;
+	int					sign;
 
+	result = 0;
+	sign = 0;
 	i = 0;
-	while (*str >= 48 && *str <= 57)
-	{
+	while (ft_isspace(str[i]))
 		i++;
-		str++;
-	}
-	if (i > 18 && n == 1)
-		return (-1);
-	if (i > 18 && n == -1)
-		return (0);
-	return (1);
-}
-
-int			ft_atoi(const char *str)
-{
-	int				n;
-	long long int	val;
-
-	val = 0;
-	n = 1;
-	while (*str == 32 || (*str >= 9 && *str <= 13))
+	if (!ft_isdigit(str[i]))
 	{
-		str++;
+		if (str[i] == '-')
+			sign = 1;
+		else if (str[i] != '+')
+			return (0);
+		i++;
 	}
-	if (*str == '-' || *str == '+')
+	while (ft_isdigit(str[i]))
 	{
-		if (*str == '-')
-			n = -1;
-		str++;
+		if (result > 9223372036854775807)
+			return (sign == 1 ? 0 : -1);
+		result = (result * 10) + (str[i] - '0');
+		i++;
 	}
-	if (check_valid(str, n) <= 0)
-		return (check_valid(str, n));
-	while (*str >= 48 && *str <= 57)
-	{
-		val = 10 * val + (*str - 48);
-		str++;
-	}
-	return (n * (int)val);
+	return (sign == 1 ? -result : result);
 }

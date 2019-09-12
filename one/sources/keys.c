@@ -6,7 +6,7 @@
 /*   By: rsatterf <rsatterf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/24 17:07:28 by nbethany          #+#    #+#             */
-/*   Updated: 2019/09/11 20:57:37 by rsatterf         ###   ########.fr       */
+/*   Updated: 2019/09/12 15:19:10 by rsatterf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@ int		key_release(int key, t_wolf_3d *wolf)
 	if (key == KEY_ESC)
 	{
 		mlx_destroy_image(wolf->mlx, wolf->window);
-		if (OS_VER == 0)
-			system("killall afplay");
+		free(wolf);
 		exit(EXIT_SUCCESS);
 	}
 	if (key == KEY_UP || key == KEY_W)

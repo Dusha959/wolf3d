@@ -3,97 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcharity <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nbethany <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/22 14:20:08 by bcharity          #+#    #+#             */
-/*   Updated: 2019/05/04 09:24:31 by bcharity         ###   ########.fr       */
+/*   Created: 2019/01/13 21:43:22 by nbethany          #+#    #+#             */
+/*   Updated: 2019/01/17 01:20:52 by nbethany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char			*freemem(char **split, size_t i)
+static	char	*ft_word(const char *str, char c, int *i)
 {
-	while (i > 0)
+	char	*s;
+	int		k;
+
+	if (!(s = (char *)malloc(sizeof(s) * (ft_strlen(str)))))
+		return (NULL);
+	k = 0;
+	while (str[*i] != c && str[*i])
 	{
-		free(split[i]);
-		i--;
+		s[k] = str[*i];
+		k++;
+		*i += 1;
 	}
-	free(split);
-	return (NULL);
+	s[k] = '\0';
+	while (str[*i] == c && str[*i])
+		*i += 1;
+	return (s);
 }
 
-static size_t		count_word(char const *s, char c)
+char			**ft_strsplit(const char *str, char c)
 {
-	char	*p;
-	size_t	lns;
-
-	if (!s)
-		return (0);
-	lns = 0;
-	p = (char*)s;
-	while (*p != '\0')
-	{
-		if (*p != c && (*(p + 1) == c || *(p + 1) == '\0'))
-			lns++;
-		p++;
-	}
-	return (lns);
-}
-
-static size_t		count_ch(char const *s, char c)
-{
-	size_t ch;
-
-	ch = 0;
-	while (*s != c && *s != '\0')
-	{
-		ch++;
-		s++;
-	}
-	s--;
-	return (ch);
-}
-
-static void			fillmem(char const *s, char c, size_t i, char **split)
-{
-	size_t	ch;
-
-	ch = count_ch(s, c);
-	if ((split[i] = (char*)malloc((ch + 1) * sizeof(char*))))
-	{
-		ft_memcpy(split[i], s, ch);
-		split[i][ch] = '\0';
-	}
-	else
-		freemem(split, i);
-}
-
-char				**ft_strsplit(char const *s, char c)
-{
-	char	**split;
-	size_t	i;
-	size_t	j;
+	int		i;
+	int		j;
+	int		wrd;
+	char	**s;
 
 	i = 0;
 	j = 0;
-	if (!s ||
-			!(split = (char**)malloc(((count_word(s, c)) + 1) * sizeof(char*))))
+	wrd = ft_count_words(str, c);
+	if (!(s = (char **)malloc(sizeof(s) * (ft_count_words(str, c) + 2))))
 		return (NULL);
-	else if (*s && s)
+	while (str[i] == c && str[i])
+		i++;
+	while (j < wrd && str[i])
 	{
-		while (i < (count_word(s, c)) && s[j] != '\0')
-		{
-			if ((s[j] != c && ((s[j - 1]) == c || (s[j + 1]) == '\0'))
-					|| (j == 0 && s[j] != c))
-			{
-				fillmem(&(s[j]), c, i, split);
-				i++;
-				j++;
-			}
-			j++;
-		}
+		s[j] = ft_word(str, c, &i);
+		j++;
 	}
-	split[count_word(s, c)] = NULL;
-	return (split);
+	s[j] = NULL;
+	return (s);
 }

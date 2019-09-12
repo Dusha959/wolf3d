@@ -3,110 +3,91 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sskinner <sskinner@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rsatterf <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 14:24:41 by sskinner          #+#    #+#             */
-/*   Updated: 2019/05/25 11:49:41 by sskinner         ###   ########.fr       */
+/*   Created: 2018/12/10 14:57:09 by rsatterf          #+#    #+#             */
+/*   Updated: 2019/01/31 18:56:43 by rsatterf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int		check_n_0(char *str)
+char	*one(char **s, int ret, char *buf, int fd)
 {
-	int i;
+	char *k;
+
+	if (s[fd] == NULL)
+		s[fd] = ft_strnew(1);
+	buf[ret] = '\0';
+	k = ft_strjoin(s[fd], buf);
+	free(s[fd]);
+	s[fd] = k;
+	return (s[fd]);
+}
+
+char	*two(char **s, char **line, int fd)
+{
+	int		i;
+	char	*k;
 
 	i = 0;
-	while (str[i] != '\n' && str[i] != '\0')
+	while ((s[fd][i] != '\n') && (s[fd][i] != '\0'))
 		i++;
-	return (i);
+	*line = ft_strsub(s[fd], 0, i);
+	k = ft_strdup(s[fd] + i + 1);
+	free(s[fd]);
+	s[fd] = k;
+	return (s[fd]);
 }
 
-static t_list	*listcreate(t_list **stack, const int fd)
+char	*get_line(char **s, char **line, int fd)
 {
-	t_list *s;
-
-	if (*stack == NULL)
-	{
-		*stack = ft_lstnew("\0", fd);
-		return (*stack);
-	}
-	if ((s = ft_lstcheck_contentsize(stack, fd)) == 0)
-	{
-		s = ft_lstnew("\0", fd);
-		ft_lstadd(stack, s);
-	}
-	return (s);
-}
-
-static int		reading_to_n(const int fd, t_list **stack)
-{
-	int		ret;
-	int		count;
-	t_list	*buf;
-	char	*tmp;
-	char	str[BUFF_SIZE + 1];
-
-	ret = BUFF_SIZE;
-	tmp = "";
-	count = 0;
-	while ((ft_strchr(tmp, '\n')) == NULL && ret == BUFF_SIZE)
-	{
-		if ((ret = read(fd, str, BUFF_SIZE)) > 0)
-		{
-			buf = listcreate(stack, fd);
-			str[ret] = '\0';
-			tmp = ft_strjoin(buf->content, str);
-			free(buf->content);
-			buf->content = tmp;
-		}
-		count += ret;
-	}
-	return (count);
-}
-
-static int		linef(t_list **stack, char **line, const int fd)
-{
-	char	*tmp;
-	char	*content;
 	int		i;
-	t_list	*search;
+	char	*k;
 
-	search = listcreate(stack, fd);
-	content = search->content;
-	i = check_n_0(content);
-	if (content[i] == '\n')
+	i = 0;
+	while ((s[fd][i] != '\n') && (s[fd][i] != '\0'))
+		i++;
+	if (s[fd][i] == '\n')
 	{
-		*line = ft_strsub(content, 0, i);
-		tmp = ft_strdup(content + i + 1);
-		free(search->content);
-		search->content = ft_strdup(tmp);
-		if (tmp[0] == '\0')
-			ft_lstdel_contentsize(stack, fd);
-		free(tmp);
+		*line = ft_strsub(s[fd], 0, i);
+		k = ft_strdup(s[fd] + i + 1);
+		free(s[fd]);
+		s[fd] = k;
 	}
-	else if (content[i] == '\0')
+	else if ((s[fd][i] == '\0') && (i != 0))
 	{
-		*line = ft_strdup(content);
-		ft_lstdel_contentsize(stack, fd);
+		*line = ft_strsub(s[fd], 0, i);
+		ft_strdel(&s[fd]);
 	}
+	return (s[fd]);
+}
+
+int		get_next_line(const int fd, char **line)
+{
+	int			ret;
+	char		buf[BUFF_SIZE + 1];
+	static char *s[255];
+
+	if ((fd == -1) || (line == NULL))
+		return (-1);
+	while ((ret = read(fd, buf, BUFF_SIZE)) > 0)
+	{
+		s[fd] = one(s, ret, buf, fd);
+		if (ft_strchr(buf, '\n'))
+			break ;
+	}
+	if (ret < 0)
+		return (-1);
+	else if (ret == 0)
+	{
+		if ((s[fd] == NULL) || (s[fd][0] == '\0'))
+			return (0);
+		else
+			s[fd] = get_line(s, line, fd);
+	}
+	else
+		s[fd] = two(s, line, fd);
 	return (1);
 }
 
-int				get_next_line(const int fd, char **line)
-{
-	static t_list	*stack;
-	int				count;
-	int				ret;
-	char			buf[BUFF_SIZE + 1];
-
-	if ((fd < 0) || (line == NULL) || read(fd, buf, 0) < 0)
-		return (-1);
-	count = reading_to_n(fd, &stack);
-	if (count == -1)
-		return (-1);
-	if (count == 0 && (ft_lstcheck_contentsize(&stack, fd) == NULL))
-		return (0);
-	ret = linef(&stack, line, fd);
-	return (ret);
-}

@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcharity <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nbethany <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/19 12:50:02 by bcharity          #+#    #+#             */
-/*   Updated: 2019/05/08 15:35:07 by bcharity         ###   ########.fr       */
+/*   Created: 2019/01/10 19:19:17 by nbethany          #+#    #+#             */
+/*   Updated: 2019/01/15 18:26:54 by nbethany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *str, int ch)
+char	*ft_strchr(const char *s, int c)
 {
-	int n;
-
-	n = ft_strlen(str);
-	return ((char*)ft_memchr(str, ch, n + 1));
+	while (*s != (unsigned char)c)
+		if (!*s++)
+			return (NULL);
+	return ((char *)s);
 }

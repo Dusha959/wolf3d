@@ -18,15 +18,15 @@ void	forward(t_wolf_3d *wolf)
 
 	if (i % 40 == 0)
 		OS_VER == 0 ? system("afplay -v 0.5 audio/shag0.wav &") :
-			system("paplay --volume 32768 audio/shag0.wav");
+		system("paplay --volume 32768 audio/shag0.wav");
 	if (i == 1000)
 		i = 0;
 	i++;
 	if (wolf->map[(int)(wolf->pos_x + wolf->dir_x *
-		wolf->move_speed)][(int)wolf->pos_y] < 1)
+									wolf->move_speed)][(int)wolf->pos_y] < 1)
 		wolf->pos_x += wolf->dir_x * wolf->move_speed;
-	if (wolf->map[(int)wolf->pos_x][(int)(wolf->pos_y + wolf->dir_y
-		* wolf->move_speed)] < 1)
+	if (wolf->map[(int)wolf->pos_x][(int)(wolf->pos_y + wolf->dir_y *
+									wolf->move_speed)] < 1)
 		wolf->pos_y += wolf->dir_y * wolf->move_speed;
 }
 
@@ -36,50 +36,50 @@ void	back(t_wolf_3d *wolf)
 
 	if (i % 40 == 0)
 		OS_VER == 0 ? system("afplay -v 0.5 audio/shag0.wav &") :
-			system("paplay --volume 32768 audio/shag0.wav");
+		system("paplay --volume 32768 audio/shag0.wav");
 	if (i == 1000)
 		i = 0;
 	i++;
 	if (wolf->map[(int)(wolf->pos_x - wolf->dir_x *
-		wolf->move_speed)][(int)wolf->pos_y] < 1)
+							wolf->move_speed)][(int)wolf->pos_y] < 1)
 		wolf->pos_x -= wolf->dir_x * wolf->move_speed;
 	if (wolf->map[(int)wolf->pos_x][(int)(wolf->pos_y -
-		wolf->dir_y * wolf->move_speed)] < 1)
+							wolf->dir_y * wolf->move_speed)] < 1)
 		wolf->pos_y -= wolf->dir_y * wolf->move_speed;
 }
 
 void	left(t_wolf_3d *wolf)
 {
-	double		oldDirX;
-	double		oldPlaneX;
+	double		old_dir_x;
+	double		old_plane_x;
 
-	oldDirX = wolf->dir_x;
+	old_dir_x = wolf->dir_x;
 	wolf->dir_x = wolf->dir_x * cos(wolf->rotate_speed) -
-		wolf->dir_y * sin(wolf->rotate_speed);
-	wolf->dir_y = oldDirX * sin(wolf->rotate_speed) +
-		wolf->dir_y * cos(wolf->rotate_speed);
-	oldPlaneX = wolf->plane_x;
+						wolf->dir_y * sin(wolf->rotate_speed);
+	wolf->dir_y = old_dir_x * sin(wolf->rotate_speed) +
+						wolf->dir_y * cos(wolf->rotate_speed);
+	old_plane_x = wolf->plane_x;
 	wolf->plane_x = wolf->plane_x * cos(wolf->rotate_speed) -
-		wolf->plane_y * sin(wolf->rotate_speed);
-	wolf->plane_y = oldPlaneX * sin(wolf->rotate_speed) +
-		wolf->plane_y * cos(wolf->rotate_speed);
+						wolf->plane_y * sin(wolf->rotate_speed);
+	wolf->plane_y = old_plane_x * sin(wolf->rotate_speed) +
+						wolf->plane_y * cos(wolf->rotate_speed);
 }
 
 void	right(t_wolf_3d *wolf)
 {
-	double		oldDirX;
-	double		oldPlaneX;
+	double		old_dir_x;
+	double		old_plane_x;
 
-	oldDirX = wolf->dir_x;
+	old_dir_x = wolf->dir_x;
 	wolf->dir_x = wolf->dir_x * cos(-wolf->rotate_speed) -
-		wolf->dir_y * sin(-wolf->rotate_speed);
-	wolf->dir_y = oldDirX * sin(-wolf->rotate_speed) +
-		wolf->dir_y * cos(-wolf->rotate_speed);
-	oldPlaneX = wolf->plane_x;
+						wolf->dir_y * sin(-wolf->rotate_speed);
+	wolf->dir_y = old_dir_x * sin(-wolf->rotate_speed) +
+						wolf->dir_y * cos(-wolf->rotate_speed);
+	old_plane_x = wolf->plane_x;
 	wolf->plane_x = wolf->plane_x * cos(-wolf->rotate_speed) -
-		wolf->plane_y * sin(-wolf->rotate_speed);
-	wolf->plane_y = oldPlaneX * sin(-wolf->rotate_speed) +
-		wolf->plane_y * cos(-wolf->rotate_speed);
+						wolf->plane_y * sin(-wolf->rotate_speed);
+	wolf->plane_y = old_plane_x * sin(-wolf->rotate_speed) +
+						wolf->plane_y * cos(-wolf->rotate_speed);
 }
 
 void	movement(t_wolf_3d *wolf)
